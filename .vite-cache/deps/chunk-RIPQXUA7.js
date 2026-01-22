@@ -6,6 +6,11 @@ import {
   useLayoutEffect2
 } from "./chunk-J7TZDEZ5.js";
 import {
+  __assign,
+  __rest,
+  __spreadArray
+} from "./chunk-UDNUQ7WZ.js";
+import {
   Primitive,
   dispatchDiscreteCustomEvent
 } from "./chunk-UNGLLPTY.js";
@@ -21,11 +26,6 @@ import {
 import {
   require_react
 } from "./chunk-QQRA6HGA.js";
-import {
-  __assign,
-  __rest,
-  __spreadArray
-} from "./chunk-UDNUQ7WZ.js";
 import {
   __toESM
 } from "./chunk-5WRI5ZAA.js";
@@ -485,26 +485,14 @@ function removeLinks(items) {
   return items.filter((item) => item.tagName !== "A");
 }
 
-// node_modules/@radix-ui/react-id/dist/index.mjs
-var React5 = __toESM(require_react(), 1);
-var useReactId = React5["useId".toString()] || (() => void 0);
-var count2 = 0;
-function useId(deterministicId) {
-  const [id, setId] = React5.useState(useReactId());
-  useLayoutEffect2(() => {
-    if (!deterministicId) setId((reactId) => reactId ?? String(count2++));
-  }, [deterministicId]);
-  return deterministicId || (id ? `radix-${id}` : "");
-}
-
 // node_modules/@radix-ui/react-portal/dist/index.mjs
-var React6 = __toESM(require_react(), 1);
+var React5 = __toESM(require_react(), 1);
 var import_react_dom = __toESM(require_react_dom(), 1);
 var import_jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
 var PORTAL_NAME = "Portal";
-var Portal = React6.forwardRef((props, forwardedRef) => {
+var Portal = React5.forwardRef((props, forwardedRef) => {
   const { container: containerProp, ...portalProps } = props;
-  const [mounted, setMounted] = React6.useState(false);
+  const [mounted, setMounted] = React5.useState(false);
   useLayoutEffect2(() => setMounted(true), []);
   const container = containerProp || mounted && globalThis?.document?.body;
   return container ? import_react_dom.default.createPortal((0, import_jsx_runtime3.jsx)(Primitive.div, { ...portalProps, ref: forwardedRef }), container) : null;
@@ -633,10 +621,10 @@ var hideOthers = function(originalTarget, parentNode, markerName) {
 };
 
 // node_modules/react-remove-scroll/dist/es2015/Combination.js
-var React15 = __toESM(require_react());
+var React14 = __toESM(require_react());
 
 // node_modules/react-remove-scroll/dist/es2015/UI.js
-var React11 = __toESM(require_react());
+var React10 = __toESM(require_react());
 
 // node_modules/react-remove-scroll-bar/dist/es2015/constants.js
 var zeroRightClassName = "right-scroll-bar-position";
@@ -683,8 +671,8 @@ function useCallbackRef2(initialValue, callback) {
 }
 
 // node_modules/use-callback-ref/dist/es2015/useMergeRef.js
-var React7 = __toESM(require_react());
-var useIsomorphicLayoutEffect = typeof window !== "undefined" ? React7.useLayoutEffect : React7.useEffect;
+var React6 = __toESM(require_react());
+var useIsomorphicLayoutEffect = typeof window !== "undefined" ? React6.useLayoutEffect : React6.useEffect;
 var currentValues = /* @__PURE__ */ new WeakMap();
 function useMergeRefs(refs, defaultValue) {
   var callbackRef = useCallbackRef2(defaultValue || null, function(newValue) {
@@ -715,7 +703,7 @@ function useMergeRefs(refs, defaultValue) {
 }
 
 // node_modules/use-sidecar/dist/es2015/hoc.js
-var React8 = __toESM(require_react());
+var React7 = __toESM(require_react());
 
 // node_modules/use-sidecar/dist/es2015/hook.js
 var import_react2 = __toESM(require_react());
@@ -807,11 +795,11 @@ function createSidecarMedium(options) {
 }
 
 // node_modules/use-sidecar/dist/es2015/renderProp.js
-var React9 = __toESM(require_react());
+var React8 = __toESM(require_react());
 var import_react3 = __toESM(require_react());
 
 // node_modules/use-sidecar/dist/es2015/exports.js
-var React10 = __toESM(require_react());
+var React9 = __toESM(require_react());
 var SideCar = function(_a) {
   var sideCar = _a.sideCar, rest = __rest(_a, ["sideCar"]);
   if (!sideCar) {
@@ -821,7 +809,7 @@ var SideCar = function(_a) {
   if (!Target) {
     throw new Error("Sidecar medium not found");
   }
-  return React10.createElement(Target, __assign({}, rest));
+  return React9.createElement(Target, __assign({}, rest));
 };
 SideCar.isSideCarExport = true;
 function exportSidecar(medium, exported) {
@@ -836,9 +824,9 @@ var effectCar = createSidecarMedium();
 var nothing = function() {
   return;
 };
-var RemoveScroll = React11.forwardRef(function(props, parentRef) {
-  var ref = React11.useRef(null);
-  var _a = React11.useState({
+var RemoveScroll = React10.forwardRef(function(props, parentRef) {
+  var ref = React10.useRef(null);
+  var _a = React10.useState({
     onScrollCapture: nothing,
     onWheelCapture: nothing,
     onTouchMoveCapture: nothing
@@ -847,11 +835,11 @@ var RemoveScroll = React11.forwardRef(function(props, parentRef) {
   var SideCar2 = sideCar;
   var containerRef = useMergeRefs([ref, parentRef]);
   var containerProps = __assign(__assign({}, rest), callbacks);
-  return React11.createElement(
-    React11.Fragment,
+  return React10.createElement(
+    React10.Fragment,
     null,
-    enabled && React11.createElement(SideCar2, { sideCar: effectCar, removeScrollBar, shards, noIsolation, inert, setCallbacks, allowPinchZoom: !!allowPinchZoom, lockRef: ref, gapMode }),
-    forwardProps ? React11.cloneElement(React11.Children.only(children), __assign(__assign({}, containerProps), { ref: containerRef })) : React11.createElement(Container, __assign({}, containerProps, { className, ref: containerRef }), children)
+    enabled && React10.createElement(SideCar2, { sideCar: effectCar, removeScrollBar, shards, noIsolation, inert, setCallbacks, allowPinchZoom: !!allowPinchZoom, lockRef: ref, gapMode }),
+    forwardProps ? React10.cloneElement(React10.Children.only(children), __assign(__assign({}, containerProps), { ref: containerRef })) : React10.createElement(Container, __assign({}, containerProps, { className, ref: containerRef }), children)
   );
 });
 RemoveScroll.defaultProps = {
@@ -865,13 +853,13 @@ RemoveScroll.classNames = {
 };
 
 // node_modules/react-remove-scroll/dist/es2015/SideEffect.js
-var React14 = __toESM(require_react());
-
-// node_modules/react-remove-scroll-bar/dist/es2015/component.js
 var React13 = __toESM(require_react());
 
-// node_modules/react-style-singleton/dist/es2015/hook.js
+// node_modules/react-remove-scroll-bar/dist/es2015/component.js
 var React12 = __toESM(require_react());
+
+// node_modules/react-style-singleton/dist/es2015/hook.js
+var React11 = __toESM(require_react());
 
 // node_modules/get-nonce/dist/es2015/index.js
 var currentNonce;
@@ -935,7 +923,7 @@ var stylesheetSingleton = function() {
 var styleHookSingleton = function() {
   var sheet = stylesheetSingleton();
   return function(styles, isDynamic) {
-    React12.useEffect(function() {
+    React11.useEffect(function() {
       sheet.add(styles);
       return function() {
         sheet.remove();
@@ -1009,7 +997,7 @@ var getCurrentUseCounter = function() {
   return isFinite(counter) ? counter : 0;
 };
 var useLockAttribute = function() {
-  React13.useEffect(function() {
+  React12.useEffect(function() {
     document.body.setAttribute(lockAttribute, (getCurrentUseCounter() + 1).toString());
     return function() {
       var newCounter = getCurrentUseCounter() - 1;
@@ -1024,10 +1012,10 @@ var useLockAttribute = function() {
 var RemoveScrollBar = function(_a) {
   var noRelative = _a.noRelative, noImportant = _a.noImportant, _b = _a.gapMode, gapMode = _b === void 0 ? "margin" : _b;
   useLockAttribute();
-  var gap = React13.useMemo(function() {
+  var gap = React12.useMemo(function() {
     return getGapWidth(gapMode);
   }, [gapMode]);
-  return React13.createElement(Style, { styles: getStyles(gap, !noRelative, gapMode, !noImportant ? "!important" : "") });
+  return React12.createElement(Style, { styles: getStyles(gap, !noRelative, gapMode, !noImportant ? "!important" : "") });
 };
 
 // node_modules/react-remove-scroll/dist/es2015/aggresiveCapture.js
@@ -1168,16 +1156,16 @@ var generateStyle = function(id) {
 var idCounter = 0;
 var lockStack = [];
 function RemoveScrollSideCar(props) {
-  var shouldPreventQueue = React14.useRef([]);
-  var touchStartRef = React14.useRef([0, 0]);
-  var activeAxis = React14.useRef();
-  var id = React14.useState(idCounter++)[0];
-  var Style2 = React14.useState(styleSingleton)[0];
-  var lastProps = React14.useRef(props);
-  React14.useEffect(function() {
+  var shouldPreventQueue = React13.useRef([]);
+  var touchStartRef = React13.useRef([0, 0]);
+  var activeAxis = React13.useRef();
+  var id = React13.useState(idCounter++)[0];
+  var Style2 = React13.useState(styleSingleton)[0];
+  var lastProps = React13.useRef(props);
+  React13.useEffect(function() {
     lastProps.current = props;
   }, [props]);
-  React14.useEffect(function() {
+  React13.useEffect(function() {
     if (props.inert) {
       document.body.classList.add("block-interactivity-".concat(id));
       var allow_1 = __spreadArray([props.lockRef.current], (props.shards || []).map(extractRef), true).filter(Boolean);
@@ -1193,7 +1181,7 @@ function RemoveScrollSideCar(props) {
     }
     return;
   }, [props.inert, props.lockRef.current, props.shards]);
-  var shouldCancelEvent = React14.useCallback(function(event, parent) {
+  var shouldCancelEvent = React13.useCallback(function(event, parent) {
     if ("touches" in event && event.touches.length === 2 || event.type === "wheel" && event.ctrlKey) {
       return !lastProps.current.allowPinchZoom;
     }
@@ -1229,7 +1217,7 @@ function RemoveScrollSideCar(props) {
     var cancelingAxis = activeAxis.current || currentAxis;
     return handleScroll(cancelingAxis, parent, event, cancelingAxis === "h" ? deltaX : deltaY, true);
   }, []);
-  var shouldPrevent = React14.useCallback(function(_event) {
+  var shouldPrevent = React13.useCallback(function(_event) {
     var event = _event;
     if (!lockStack.length || lockStack[lockStack.length - 1] !== Style2) {
       return;
@@ -1256,7 +1244,7 @@ function RemoveScrollSideCar(props) {
       }
     }
   }, []);
-  var shouldCancel = React14.useCallback(function(name, delta, target, should) {
+  var shouldCancel = React13.useCallback(function(name, delta, target, should) {
     var event = { name, delta, target, should, shadowParent: getOutermostShadowParent(target) };
     shouldPreventQueue.current.push(event);
     setTimeout(function() {
@@ -1265,17 +1253,17 @@ function RemoveScrollSideCar(props) {
       });
     }, 1);
   }, []);
-  var scrollTouchStart = React14.useCallback(function(event) {
+  var scrollTouchStart = React13.useCallback(function(event) {
     touchStartRef.current = getTouchXY(event);
     activeAxis.current = void 0;
   }, []);
-  var scrollWheel = React14.useCallback(function(event) {
+  var scrollWheel = React13.useCallback(function(event) {
     shouldCancel(event.type, getDeltaXY(event), event.target, shouldCancelEvent(event, props.lockRef.current));
   }, []);
-  var scrollTouchMove = React14.useCallback(function(event) {
+  var scrollTouchMove = React13.useCallback(function(event) {
     shouldCancel(event.type, getTouchXY(event), event.target, shouldCancelEvent(event, props.lockRef.current));
   }, []);
-  React14.useEffect(function() {
+  React13.useEffect(function() {
     lockStack.push(Style2);
     props.setCallbacks({
       onScrollCapture: scrollWheel,
@@ -1295,11 +1283,11 @@ function RemoveScrollSideCar(props) {
     };
   }, []);
   var removeScrollBar = props.removeScrollBar, inert = props.inert;
-  return React14.createElement(
-    React14.Fragment,
+  return React13.createElement(
+    React13.Fragment,
     null,
-    inert ? React14.createElement(Style2, { styles: generateStyle(id) }) : null,
-    removeScrollBar ? React14.createElement(RemoveScrollBar, { gapMode: props.gapMode }) : null
+    inert ? React13.createElement(Style2, { styles: generateStyle(id) }) : null,
+    removeScrollBar ? React13.createElement(RemoveScrollBar, { gapMode: props.gapMode }) : null
   );
 }
 function getOutermostShadowParent(node) {
@@ -1318,8 +1306,8 @@ function getOutermostShadowParent(node) {
 var sidecar_default = exportSidecar(effectCar, RemoveScrollSideCar);
 
 // node_modules/react-remove-scroll/dist/es2015/Combination.js
-var ReactRemoveScroll = React15.forwardRef(function(props, ref) {
-  return React15.createElement(RemoveScroll, __assign({}, props, { ref, sideCar: sidecar_default }));
+var ReactRemoveScroll = React14.forwardRef(function(props, ref) {
+  return React14.createElement(RemoveScroll, __assign({}, props, { ref, sideCar: sidecar_default }));
 });
 ReactRemoveScroll.classNames = RemoveScroll.classNames;
 var Combination_default = ReactRemoveScroll;
@@ -1328,9 +1316,8 @@ export {
   DismissableLayer,
   useFocusGuards,
   FocusScope,
-  useId,
   Portal,
   hideOthers,
   Combination_default
 };
-//# sourceMappingURL=chunk-SJGET52M.js.map
+//# sourceMappingURL=chunk-RIPQXUA7.js.map

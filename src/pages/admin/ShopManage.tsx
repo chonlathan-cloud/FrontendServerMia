@@ -93,9 +93,9 @@ export default function ShopManage() {
         setSavingIntegration(true);
         try {
             await updateShopIntegration(shopId, {
-                channelAccessToken,
-                channelSecret,
-                lineUserId,
+                channelAccessToken: channelAccessToken,
+                channelSecret: channelSecret,
+                botBasicId: lineUserId,
                 displayName,
             });
             toast.success("Integration settings saved");
