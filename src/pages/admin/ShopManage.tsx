@@ -20,7 +20,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, RefreshCw } from "lucide-react";
 import {
     getAdminShopDetail,
     updateShopIntegration,
@@ -28,13 +28,18 @@ import {
     AdminShop
 } from "@/lib/api";
 
+// ✅ 1. เพิ่ม Type ให้ครบถ้วน เพื่อไม่ให้ TypeScript ฟ้องแดง
 type ShopDetail = AdminShop & {
     lineConfig?: {
         channelAccessToken?: string;
         channelSecret?: string;
-        lineUserId?: string;
+        botBasicId?: string; // เพิ่มตัวนี้ (U...)
+        basicId?: string;    // เพิ่มตัวนี้ (@...)
+        lineUserId?: string; // ตัวเก่า (เผื่อมี)
         displayName?: string;
+        pictureUrl?: string;
     };
+    public_url?: string;
 };
 
 export default function ShopManage() {
@@ -46,8 +51,6 @@ export default function ShopManage() {
     // Integration State
     const [channelAccessToken, setChannelAccessToken] = useState("");
     const [channelSecret, setChannelSecret] = useState("");
-    const [displayName, setDisplayName] = useState("");
-    const [lineUserId, setLineUserId] = useState("");
     const [savingIntegration, setSavingIntegration] = useState(false);
 
     // Plan State
@@ -59,21 +62,15 @@ export default function ShopManage() {
             if (!shopId) return;
             try {
                 setLoading(true);
-                // Note: You might need to adjust this if getAdminShopDetail returns something different
-                // Assuming it returns { id, name, ... lineConfig: { ... } }
                 const data: any = await getAdminShopDetail(shopId);
-
-                // Handle wrapping if API returns { success: true, data: ... }
                 const shopData = data?.data || data;
 
                 setShop(shopData);
                 if (shopData) {
-                    // Init Integration
+                    // Init Integration Inputs
                     const line = shopData.lineConfig || {};
                     setChannelAccessToken(line.channelAccessToken || "");
                     setChannelSecret(line.channelSecret || "");
-                    setDisplayName(line.displayName || "");
-                    setLineUserId(line.lineUserId || "");
 
                     // Init Plan
                     setTier(shopData.tier || "Free");
@@ -92,13 +89,17 @@ export default function ShopManage() {
         if (!shopId) return;
         setSavingIntegration(true);
         try {
+            // ✅ ส่งแค่ Token กับ Secret ก็พอ Backend จะจัดการดึง BotID ให้เอง
             await updateShopIntegration(shopId, {
                 channelAccessToken: channelAccessToken,
                 channelSecret: channelSecret,
-                botBasicId: lineUserId,
-                displayName,
             });
-            toast.success("Integration settings saved");
+
+            toast.success("บันทึกสำเร็จ! ระบบกำลังดึงข้อมูล LINE OA...");
+
+            // Reload เพื่อแสดงผลข้อมูลที่ Auto-detect มาได้
+            setTimeout(() => window.location.reload(), 1500);
+
         } catch (err: any) {
             console.error("Save integration failed", err);
             toast.error(err?.message || "Failed to save integration");
@@ -113,7 +114,6 @@ export default function ShopManage() {
         try {
             await updateShopTier(shopId, tier);
             toast.success("Shop tier updated");
-            // Update local state if needed
             if (shop) setShop({ ...shop, tier });
         } catch (err: any) {
             console.error("Save tier failed", err);
@@ -131,6 +131,21 @@ export default function ShopManage() {
         return <div className="p-8 text-center">Shop not found</div>;
     }
 
+    // Helper เพื่อดึงค่า ID ที่มีอยู่ (Prioritize: botBasicId -> basicId -> lineUserId)
+    const displayBotId = shop?.lineConfig?.botBasicId || shop?.lineConfig?.basicId || shop?.lineConfig?.lineUserId;
+    const publicUrl = shop?.public_url;
+
+    const copyText = async (label: string, value?: string | null) => {
+        if (!value) return;
+        try {
+            await navigator.clipboard.writeText(value);
+            toast.success(`คัดลอก ${label} แล้ว`);
+        } catch (error) {
+            console.error("copy failed", error);
+            toast.error("คัดลอกไม่สำเร็จ");
+        }
+    };
+
     return (
         <div className="p-8 space-y-6 max-w-4xl mx-auto">
             <div className="flex items-center gap-4">
@@ -139,7 +154,7 @@ export default function ShopManage() {
                 </Button>
                 <div>
                     <h1 className="text-2xl font-bold">{shop.name}</h1>
-                    <p className="text-muted-foreground">{shop.ownerEmail}</p>
+                    <p className="text-muted-foreground">Shop ID: {shop.shop_id || shop.id}</p>
                 </div>
             </div>
 
@@ -155,51 +170,98 @@ export default function ShopManage() {
                         <CardHeader>
                             <CardTitle>LINE Official Account Integration</CardTitle>
                             <CardDescription>
-                                Configure the Messaging API channel settings for this shop.
+                                ใส่ Channel Access Token และ Secret เพื่อเชื่อมต่อ (ระบบจะดึงข้อมูลบอทให้อัตโนมัติ)
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
+                            {/* รูปโปรไฟล์บอท (ถ้ามี) */}
+                            {shop?.lineConfig?.pictureUrl && (
+                                <div className="flex justify-center mb-4">
+                                    <img
+                                        src={shop.lineConfig.pictureUrl}
+                                        alt="Bot Profile"
+                                        className="w-20 h-20 rounded-full border shadow-sm"
+                                    />
+                                </div>
+                            )}
+
                             <div className="space-y-2">
-                                <Label>Channel Access Token</Label>
+                                <Label>Channel Access Token <span className="text-red-500">*</span></Label>
                                 <Input
                                     value={channelAccessToken}
                                     onChange={(e) => setChannelAccessToken(e.target.value)}
                                     placeholder="Enter Channel Access Token"
+                                    className="font-mono text-sm"
                                 />
                             </div>
 
                             <div className="space-y-2">
-                                <Label>Channel Secret</Label>
+                                <Label>Channel Secret <span className="text-red-500">*</span></Label>
                                 <Input
                                     value={channelSecret}
                                     onChange={(e) => setChannelSecret(e.target.value)}
                                     placeholder="Enter Channel Secret"
+                                    type="password"
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-4 pt-2">
                                 <div className="space-y-2">
                                     <Label>LINE User ID (Bot ID)</Label>
                                     <Input
-                                        value={lineUserId}
-                                        onChange={(e) => setLineUserId(e.target.value)}
-                                        placeholder="@example"
+                                        value={displayBotId || "รอการเชื่อมต่อ..."}
+                                        disabled={true}
+                                        className="bg-slate-100 text-slate-600 font-mono"
                                     />
+                                    <p className="text-[11px] text-muted-foreground">
+                                        *ระบบดึงให้อัตโนมัติ (ใช้สำหรับ Webhook)
+                                    </p>
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Display Name</Label>
                                     <Input
-                                        value={displayName}
-                                        onChange={(e) => setDisplayName(e.target.value)}
-                                        placeholder="Shop Name on LINE"
+                                        value={shop?.lineConfig?.displayName || "-"}
+                                        disabled={true}
+                                        className="bg-slate-100 text-slate-600"
                                     />
                                 </div>
                             </div>
 
-                            <div className="pt-4">
-                                <Button onClick={handleSaveIntegration} disabled={savingIntegration}>
-                                    <Save className="w-4 h-4 mr-2" />
-                                    {savingIntegration ? "Saving..." : "Save Configuration"}
+                            <div className="space-y-2 pt-2">
+                                <Label>Public Website URL</Label>
+                                <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                                    <Input
+                                        value={publicUrl || "รอการเชื่อมต่อ..."}
+                                        disabled={true}
+                                        className="bg-slate-100 text-slate-600 font-mono"
+                                    />
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => copyText("ลิงก์เว็บไซต์", publicUrl)}
+                                        disabled={!publicUrl}
+                                    >
+                                        คัดลอกลิงก์
+                                    </Button>
+                                </div>
+                                <p className="text-[11px] text-muted-foreground">
+                                    ใช้ลิงก์นี้สำหรับ Rich Menu ของร้าน
+                                </p>
+                            </div>
+
+                            <div className="pt-6 flex justify-end">
+                                <Button onClick={handleSaveIntegration} disabled={savingIntegration} className="w-full sm:w-auto">
+                                    {savingIntegration ? (
+                                        <>
+                                            <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                                            Connecting...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Save className="w-4 h-4 mr-2" />
+                                            Save & Connect
+                                        </>
+                                    )}
                                 </Button>
                             </div>
                         </CardContent>

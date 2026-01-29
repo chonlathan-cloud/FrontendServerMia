@@ -10,7 +10,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { MainLayout } from '@/components/layout/MainLayout';
 
 import { Login } from '@/pages/Login';
-import { Dashboard } from '@/pages/Dashboard';
+import Dashboard from '@/pages/Dashboard';
 import { LineCallback } from '@/pages/LineCallback';
 import { Broadcast } from '@/pages/Broadcast';
 import { Analytics } from '@/pages/Analytics';
@@ -128,6 +128,7 @@ function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
 
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="shops/:shopId" element={<ShopManage />} />
           <Route path="line-callback" element={<LineCallback />} />
 
           <Route path="broadcast" element={<Broadcast />} />

@@ -1,9 +1,8 @@
-import { Home, Send, BarChart3, Users, Settings, MessageSquare, X, ShoppingCart } from 'lucide-react';
+import { Home, Send, BarChart3, Users, Settings, MessageSquare, X, ShoppingCart, Globe, Link as LinkIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { useStore } from '@/store/useStore';
-import { Globe } from "lucide-react";
 
 interface SidebarProps {
   open: boolean;
@@ -12,6 +11,7 @@ interface SidebarProps {
 
 const navItems = [
   { path: '/dashboard', icon: Home, label: 'หน้าหลัก' },
+  { path: '/settings/store', icon: LinkIcon, label: 'เชื่อมต่อ LINE OA' },
   { path: '/broadcast', icon: Send, label: 'ส่งข้อความ' },
   { path: '/analytics', icon: BarChart3, label: 'รายงานสถิติ' },
   { path: "/website", icon: Globe, label: "Website" },

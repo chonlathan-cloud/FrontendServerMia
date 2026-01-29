@@ -103,26 +103,38 @@ export type AdminShop = {
   ownerEmail: string;
   tier: "Free" | "Pro";
   lineConnected: boolean;
+  shop_id?: string;
+  public_url?: string;
 };
 
 export async function getAdminShops(): Promise<AdminShop[]> {
-  return authedJson("/api/admin/shops");
+  return authedJson("/admin/shops");
+}
+
+export async function createAdminShop(name: string, ownerEmail: string) {
+  return authedJson("/admin/shops", {
+    method: "POST",
+    body: JSON.stringify({
+      name,
+      owner_uid: ownerEmail // ใช้ Email หรือ ID เป็น owner_uid ชั่วคราว
+    }),
+  });
 }
 
 export async function getAdminShopDetail(shopId: string) {
-  return authedJson(`/api/admin/shops/${shopId}`);
+  return authedJson(`/admin/shops/${shopId}`);
 }
 
 export async function updateShopIntegration(shopId: string, data: any) {
-  return authedJson(`/api/admin/shops/${shopId}/integration`, {
-    method: "POST", // or PUT/PATCH depending on backend
+  return authedJson(`/admin/shops/${shopId}/integration`, {
+    method: "PATCH", // หรือ PATCH ตาม Backend
     body: JSON.stringify(data),
   });
 }
 
 export async function updateShopTier(shopId: string, tier: "Free" | "Pro") {
-  return authedJson(`/api/admin/shops/${shopId}/tier`, {
-    method: "POST", // or PATCH
+  return authedJson(`/admin/shops/${shopId}/tier`, {
+    method: "PATCH", // หรือ PATCH
     body: JSON.stringify({ tier }),
   });
 }
